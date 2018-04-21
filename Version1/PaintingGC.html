@@ -6,30 +6,32 @@
 <title> Timesheet App </title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-<link rel="stylesheet" href="timesheet.css">
+<link rel="stylesheet" href="style.css">
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </head>
 
 <body>
-<a href="./index.html"><img src="https://image.ibb.co/cWKmP7/152396886185935329.png" style="transform: scale(.6)"/></a>
 
-    <div class="container" style="margin-top: 15vh">
+<!-- BACK ARROW -->
+<a href="./index.html"><img src="back-arrow-blue.png" style="transform: scale(.6)"/></a>
+
+    <div class="container top-margin">
         <div class="row">
-            <div class="col-12 text-center" style="height:4em"></div>
+            <div class="col-12 text-center height-4"></div>
 
-            <div class="col-12 text-center" style="font-size: 4em;">
+            <div class="col-12 text-center font-4">
               PAINTING GC LOGIN
             </div>
-            <div class="col-12 text-center" style="height:4em"></div>
+            <div class="col-12 text-center height-4"></div>
         </div>
   
 
         <div class="form-group row">
           <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Name</label>
             <div class="col-sm-10">
-              <select class="form-control form-control-lg" id="name_options">
+              <select class="form-control form-control-lg form-input">
                 <option>Choose your name</option>
                 <option>John Smith</option>
                 <option>Jane Doe</option>
@@ -42,14 +44,14 @@
         <div class="form-group row">
           <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Studio Code</label>
             <div class="col-sm-10">
-              <input type="code" class="form-control form-control-lg" id="colFormLabelLg" placeholder="">
+              <input type="code" class="form-control form-control-lg form-input" id="colFormLabelLg" placeholder="">
             </div>
         </div>
 
-        <div class="row" style="height: 3rem;"></div>
+        <div class="row height-3"></div>
 
-        <div class="row" style="height: 3rem;">
-          <button type="button" class="btn btn-lg btn-block" style="width: 50%; margin-left: 25%; background-color: #E36C41; color:white; border: #f29574;">LOGIN</button>
+        <div class="row height-3">
+          <a href="timesheetapp.html" role="button" class="btn btn-lg btn-block login-btn blue">LOGIN</a>
         </div>
       </div>
 </body>
