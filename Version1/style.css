@@ -1,0 +1,101 @@
+
+@font-face {
+    font-family: 'gotham_medium';
+    src: url('gothammediumregular-webfont.woff') format('woff'),
+         url('GothamMedium.ttf') format('truetype');
+    /*font-weight: normal;
+    font-style: normal;*/
+}
+
+body{
+	font-family:'gotham_medium';
+}
+
+
+.top-margin{
+	margin-top: 15vh;
+}
+
+.form-input{
+	font-family: sans-serif;
+}
+
+.height-4{
+	height:4em;
+}
+
+.height-3{
+	height:3rem;
+}
+
+.font-4{
+	font-size: 4em;
+}
+
+.font-3{
+	font-size: 4rem;
+}
+
+.login-btn{
+	width: 50%; 
+	margin-left: 25%;
+	color: white; 
+	border: none; 
+	line-height: 2.3em;
+}
+
+.line-height{
+	padding-top: 1em;
+}
+
+.AFH-card{
+	height: 17rem; 
+	font-size: 2.9em; 
+	color:white; 
+	border: none
+}
+
+.green{
+	background-color: #C1D82F;
+}
+
+.blue{
+	background-color: #50C8E8;
+}
+
+.red{
+	background-color: #F26531;
+}
+
+.grey{
+	background-color: #6A737B;
+}
+
+.card-text{
+	text-align: center; 
+	vertical-align: middle; 
+	line-height: 16rem;
+}
+
+#Video_Motion{
+	text-align: center; 
+	vertical-align: middle; 
+	margin-top: 1.2em;
+}
+
+#Photography{
+	font-size:.9em;
+}
+
+.table th{
+	padding-top: 1.5rem;
+}
+
+.table td{
+	padding-top: 1.5rem;
+}
+
+
+.no_underline{
+	text-decoration: none;
+}
