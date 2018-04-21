@@ -99,3 +99,8 @@ body{
 .no_underline{
 	text-decoration: none;
 }
+
+
+a:hover{
+	color: white;
+}
