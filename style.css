@@ -104,3 +104,31 @@ body{
 a:hover{
 	color: white;
 }
+
+#authorize-btn{
+	color: white; 
+	border: none; 
+	position: absolute;
+    float:right;
+    margin:25px 25px 0 0;
+    height: 2em;
+	line-height: 2em;
+	display: none;
+	padding-top: 1.5rem;
+}
+
+button{
+	padding-top: .8rem;
+}
+
+#signout-btn{
+	color: white; 
+	border: none; 
+	position: absolute;
+    float:right;
+    margin:25px 25px 0 0;
+	height: 2em;
+	line-height: 2em;
+	display: none;
+	padding-top: 1.5rem;
+}
