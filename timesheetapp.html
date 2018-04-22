@@ -208,27 +208,6 @@ limitations under the License.
         p.appendChild(textContent);
       }
       
-      function findRow() {
-      var test = -1;
-      gapi.client.sheets.spreadsheets.values.get({
-          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-          range: studio+'!A2:AA',
-        }).then(function(response) {
-        	 var range = response.result;
-          for (i = 0; i < range.values.length; i++) {
-          	var currentName = range.values[i][0] + " " + range.values[i][1];
-          	if (studName == currentName) { 
-          		test = i;
-          		break;
-          	}      	
-          } 
-        
-        }, function(response) {
-          appendPre('Error: ' + response.result.error.message);
-        }); 
-        return test;
-      }
-      
       function fillTable() {
       	gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
