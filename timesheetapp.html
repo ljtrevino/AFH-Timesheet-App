@@ -30,8 +30,7 @@ limitations under the License.
         <div class="row">
             <div class="col-12 text-center" style="height:4em"></div>
 
-            <div class="col-12 text-center" style="font-size: 4em;">
-              STUDENT NAME
+            <div id = "studentName" class="col-12 text-center" style="font-size: 4em;">
             </div>
 
             <div class="col-12 text-center" style="height:4em"></div>
@@ -48,6 +47,7 @@ limitations under the License.
                   <th scope="col" colspan="2">WEDNESDAY</th>
                   <th scope="col" colspan="2">THURSDAY</th>
                   <th scope="col" colspan="2">FRIDAY</th>
+                  <th scope="col" colspan="2">WEEKEND</th>
                 </tr>
               </thead>
               <tbody>
@@ -62,27 +62,32 @@ limitations under the License.
                   <td>OUT</td>
                   <td>IN</td>
                   <td>OUT</td>
+                  <td>IN</td>
+                  <td>OUT</td>
                 </tr>
 
                 <tr style="height:6em">
-                  <td>3</td>
-                  <td>5</td>
-                  <td></td>
-                  <td></td>
-                  <td>6</td>
-                  <td>7:30</td>
-                  <td></td>
-                  <td></td>
-                  <td>4</td>
-                  <td>5:15</td>
+                  <td id = "MIn"></td>
+                  <td id = "MOut"></td>
+                  <td id = "TIn"></td>
+                  <td id = "TOut"></td>
+                  <td id = "WIn"></td>
+                  <td id = "WOut"></td>
+                  <td id = "ThIn"></td>
+                  <td id = "ThOut"></td>
+                  <td id = "FIn"></td>
+                  <td id = "FOut"></td>
+                  <td id = "WkIn"></td>
+                  <td id = "WkOut"></td>
                 </tr>
 
                 <tr style="height:6em">
-                  <td colspan="2"></td>
-                  <td colspan="2"></td>
-                  <td colspan="2"></td>
-                  <td colspan="2"></td>
-                  <td colspan="2"></td>
+                  <td id = "MTotal" colspan="2"></td>
+                  <td id = "TTotal" colspan="2"></td>
+                  <td id = "WTotal" colspan="2"></td>
+                  <td id = "ThTotal" colspan="2"></td>
+                  <td id = "FTotal" colspan="2"></td>
+                  <td id = "WkTotal" colspan="2"></td>
                 </tr>
                   
               </tbody>
@@ -131,8 +136,7 @@ limitations under the License.
       var signoutButton = document.getElementById('signout-button');
       
       // Names of participants and name of the studio they are in
-      var studName = "Jenny Zhang";
-      var studRow = 0;
+      var studName = "Linnea Rylander";
       var studio = 'Graphics';
 
       /**
@@ -171,7 +175,7 @@ limitations under the License.
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
-          getNames();
+          fillTable();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -204,27 +208,66 @@ limitations under the License.
         p.appendChild(textContent);
       }
       
-      function getNames() {
-        gapi.client.sheets.spreadsheets.values.get({
+      function findRow() {
+      var test = -1;
+      gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
           range: studio+'!A2:AA',
         }).then(function(response) {
-          var range = response.result;
-		  var select = document.getElementById("selectName");
-          if (range.values.length > 0) {
-            for (i = 0; i < range.values.length; i++) {
-              var row = range.values[i];
-              names.push(row[0]+ " " + row[1]);
-              
-              var opt = row[0] + " " + row[1];
-        	  var el = document.createElement("option");
-              el.textContent = opt;
-              el.value = opt;
-              select.appendChild(el);
-            }
-          } else {
-            appendPre('No data found.');
-          }
+        	 var range = response.result;
+          for (i = 0; i < range.values.length; i++) {
+          	var currentName = range.values[i][0] + " " + range.values[i][1];
+          	if (studName == currentName) { 
+          		test = i;
+          		break;
+          	}      	
+          } 
+        
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        }); 
+        return test;
+      }
+      
+      function fillTable() {
+      	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: studio+'!A2:AA',
+        }).then(function(response) {
+        	var range = response.result;
+        	var found = false;
+          	for (i = 0; i < range.values.length; i++) {
+				var currentName = range.values[i][0] + " " + range.values[i][1];
+				if (studName == currentName) { 
+					document.getElementById("studentName").innerHTML = studName;
+					found = true;
+					
+					var row = range.values[i];
+					document.getElementById("MIn").innerHTML = row[2];
+					document.getElementById("MOut").innerHTML = row[3];
+					document.getElementById("MTotal").innerHTML = row[4];
+					document.getElementById("TIn").innerHTML = row[5];
+					document.getElementById("TOut").innerHTML = row[6];
+					document.getElementById("TTotal").innerHTML = row[7];
+					document.getElementById("WIn").innerHTML = row[8];
+					document.getElementById("WOut").innerHTML = row[9];
+					document.getElementById("WTotal").innerHTML = row[10];
+					document.getElementById("ThIn").innerHTML = row[11];
+					document.getElementById("ThOut").innerHTML = row[12];
+					document.getElementById("ThTotal").innerHTML = row[13];
+					document.getElementById("FIn").innerHTML = row[14];
+					document.getElementById("FOut").innerHTML = row[15];
+					document.getElementById("FTotal").innerHTML = row[16];
+					document.getElementById("WkIn").innerHTML = row[17];
+					document.getElementById("WkOut").innerHTML = row[18];
+					document.getElementById("WkTotal").innerHTML = row[19];     
+					break;
+				}      	
+          } 
+          if (found == false) {
+      		document.getElementById("studentName").innerHTML = "Error: student not found";
+      		return None;
+      		}
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
         }); 
