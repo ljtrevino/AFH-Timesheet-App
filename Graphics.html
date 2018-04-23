@@ -18,12 +18,8 @@ limitations under the License.
   <head>
     <title> Timesheet App </title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-<link rel="stylesheet" href="style.css">
-
+	<link rel="stylesheet" href="style.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
     <meta charset='utf-8' />
   </head>
   <body>
@@ -67,10 +63,8 @@ limitations under the License.
           <a href="timesheetapp.html" role="button" class="btn btn-lg btn-block login-btn grey">LOGIN</a>
         </div>
       </div>
+      <p id="content"></p>
 
-
-    <p id="content"></p>
-    <p id = "test"></p>
 
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
@@ -87,8 +81,7 @@ limitations under the License.
       var authorizeButton = document.getElementById('authorize-button');
       var signoutButton = document.getElementById('signout-button');
       
-      // Names of participants and name of the studio they are in
-      var names = [];
+      // Name of studio
       var studio = 'Graphics';
 
       /**
