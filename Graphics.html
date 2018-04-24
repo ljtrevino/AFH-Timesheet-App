@@ -13,20 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
   <head>
     <title> Timesheet App </title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 	<link rel="stylesheet" href="style.css">
+
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <meta charset='utf-8' />
   </head>
   <body>
 
-    <!-- BACK ARROW -->
+<!-- BACK ARROW -->
 <a href="./index.html"><img src="back-arrow-grey.png" style="transform: scale(.6)"/></a>
-
 <!--Add buttons to initiate auth sequence and sign out-->
 <button id="authorize-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Authorize</button>
 <button id="signout-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Sign Out</button>
@@ -40,6 +41,7 @@ limitations under the License.
             </div>
             <div class="col-12 text-center height-4"></div>
         </div>
+  
 
         <div class="form-group row">
           <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Name</label>
@@ -65,8 +67,8 @@ limitations under the License.
       </div>
       <p id="content"></p>
 
-
-    <script type="text/javascript">
+    
+<script type="text/javascript">
       // Client ID and API key from the Developer Console
       var CLIENT_ID = '607362006296-la054vb71t7p8ju0ic4rc08ge4lc7j92.apps.googleusercontent.com';
       var API_KEY = 'AIzaSyAStm_2OiPlEUk0eJIg_UY8mShw6Fn9Fg8';
@@ -81,7 +83,8 @@ limitations under the License.
       var authorizeButton = document.getElementById('authorize-button');
       var signoutButton = document.getElementById('signout-button');
       
-      // Name of studio
+      // Names of participants and name of the studio they are in
+      var names = [];
       var studio = 'Graphics';
 
       /**
@@ -162,9 +165,7 @@ limitations under the License.
 		  var select = document.getElementById("selectName");
           if (range.values.length > 0) {
             for (i = 0; i < range.values.length; i++) {
-              var row = range.values[i];
-              names.push(row[0]+ " " + row[1]);
-              
+              var row = range.values[i];              
               var opt = row[0] + " " + row[1];
         	  var el = document.createElement("option");
               el.textContent = opt;

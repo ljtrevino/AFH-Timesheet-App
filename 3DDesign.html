@@ -84,7 +84,6 @@ limitations under the License.
       var signoutButton = document.getElementById('signout-button');
       
       // Names of participants and name of the studio they are in
-      var names = [];
       var studio = '3D Design';
 
       /**
@@ -165,9 +164,7 @@ limitations under the License.
 		  var select = document.getElementById("selectName");
           if (range.values.length > 0) {
             for (i = 0; i < range.values.length; i++) {
-              var row = range.values[i];
-              names.push(row[0]+ " " + row[1]);
-              
+              var row = range.values[i];              
               var opt = row[0] + " " + row[1];
         	  var el = document.createElement("option");
               el.textContent = opt;
