@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 
@@ -21,7 +20,7 @@
 	<div class="container">
         <div class="row">
         	<div class="col-6">
-        	<a href="./Graphics.html" style="text-decoration: none">
+        	<a onclick = "chooseStudio('Graphics')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card grey">
 	            	<div class="card-text"> Graphics </div>
 	            </div>
@@ -31,7 +30,7 @@
             </div> -->
 
             <div class="col-6">
-            <a href="./Video&Motion.html" style="text-decoration: none">
+            <a onclick = "chooseStudio('Video & Motion')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card blue">
 	            	<div id="Video_Motion"> Video & <br> Motion </div>
 	            </div>
@@ -44,7 +43,7 @@
 
         <div class="row">
         	<div class="col-6">
-        	<a href="./Photography.html" style="text-decoration: none">
+        	<a onclick = "chooseStudio('Photography')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card blue">
 	            	<div class="card-text" id="Photography"> Photography </div>
 	            </div>
@@ -54,7 +53,7 @@
             </div> -->
 
             <div class="col-6">
-            <a href="./3DDesign.html" style="text-decoration: none">
+            <a onclick = "chooseStudio('3D Design')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card grey">
 	            	<div class="card-text"> 3D Design </div>
 	            </div>
@@ -67,7 +66,7 @@
 
         <div class="row">
         	<div class="col-6">
-        	<a href="./PaintingPW.html" style="text-decoration: none">
+        	<a onclick = "chooseStudio('Painting PW')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card grey">
 	            	<div class="card-text"> Painting PW </div>
 	            </div>
@@ -77,7 +76,7 @@
             </div> -->
 
             <div class="col-6">
-            <a href="./PaintingAF.html" style="text-decoration: none">
+            <a onclick = "chooseStudio('Painting AF')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card blue">
 	            	<div class="card-text"> Painting AF </div>
 	            </div>
@@ -90,7 +89,7 @@
 
         <div class="row">
         	<div class="col-6">
-        	<a href="./PaintingGC.html" style="text-decoration: none">
+        	<a onclick = "chooseStudio('Painting GC')" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card blue">
 	            	<div class="card-text"> Painting GC </div>
 	            </div>
@@ -100,7 +99,7 @@
             </div> -->
 
             <div class="col-6">
-            <a href="./PaintingMG.html" style="text-decoration: none">
+            <a onclick = "chooseStudio('Painting MG')"" style="text-decoration: none">
 	            <div class="card-body card border-secondary text-center AFH-card grey">
 	            	<div class="card-text"> Painting MG </div>
 	            </div>
@@ -113,15 +112,13 @@
 
     </div>
 
+<script type="text/javascript">
+	function chooseStudio(name){
+		sessionStorage.setItem("studioSelection", name);
+	    window.location.href = 'login.html';  
 
-
-
-
-
-
-
-
-
+	}
+</script>
 
 </body>
 </html>
