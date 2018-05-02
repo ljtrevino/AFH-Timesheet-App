@@ -26,7 +26,6 @@ limitations under the License.
     <meta charset='utf-8' />
   </head>
   <body>
-
     <a href="./index.html"><img src="back-arrow-green.png" style="transform: scale(.6)"/></a>
     <button id="authorize-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Authorize</button>
 <button id="signout-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Sign Out</button>
@@ -41,7 +40,6 @@ limitations under the License.
             <div class="col-12 text-center" style="height:4em"></div>
         </div>
   
-
         <div class="row">
           <div class="col">
             <table class="table table-bordered table-hover-cells text-center">
@@ -139,8 +137,8 @@ limitations under the License.
       var signoutButton = document.getElementById('signout-button');
       
       // Names of participants and name of the studio they are in
-      var studName = "Linnea Rylander";
-      var studio = 'Graphics';
+      var studName;
+      var studio;
 
       /**
        *  On load, called to load the auth2 library and API client library.
@@ -178,6 +176,8 @@ limitations under the License.
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
+          studName = sessionStorage.getItem("studentName");
+          studio = sessionStorage.getItem("studioName");
           fillTable();
         } else {
           authorizeButton.style.display = 'block';

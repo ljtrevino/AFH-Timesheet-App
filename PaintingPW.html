@@ -62,7 +62,7 @@ limitations under the License.
         <div class="row height-3"></div>
 
         <div class="row height-3">
-          <a href="timesheetapp.html" role="button" class="btn btn-lg btn-block login-btn grey">LOGIN</a>
+          <a onclick = "chooseName()" role="button" class="btn btn-lg btn-block login-btn grey">LOGIN</a>
         </div>
       </div>
       <p id="content"></p>
@@ -153,6 +153,17 @@ limitations under the License.
         var p = document.getElementById('content');
         var textContent = document.createTextNode(message + '\n');
         p.appendChild(textContent);
+      }
+      
+      function chooseName(){
+      	var nameSelect = document.getElementById('selectName').value;
+      	if (nameSelect == 'Choose your name') {
+      		alert('Please select a name');
+      	} else {
+      		sessionStorage.setItem("studentName", nameSelect);
+      		sessionStorage.setItem("studioName", studio);
+      		window.location.href = 'timesheetapp.html';  
+      	}
       }
       
       function getNames() {
