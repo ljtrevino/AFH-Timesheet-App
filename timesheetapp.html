@@ -103,17 +103,17 @@ limitations under the License.
 
         <div class="row">
             <div class="col">
-                <a role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN ON TIME</a>
+                <a onclick = "addTime(1)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN ON TIME</a>
             </div>
             <div class="col">
-                <a role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN OTHER</a>
+                <a onclick = "addTime(2)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN OTHER</a>
             </div>
             
             <div class="col">
-                <a role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT ON TIME</a>
+                <a onclick = "addTime(3)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT ON TIME</a>
             </div>
             <div class="col">
-                <a role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT OTHER</a>
+                <a onclick = "addTime(4)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT OTHER</a>
             </div>
         </div>
         <div class="row">
@@ -191,7 +191,6 @@ limitations under the License.
           studName = sessionStorage.getItem("studentName");
           studio = sessionStorage.getItem("studioName");
           fillTable();
-          test3();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -269,9 +268,10 @@ limitations under the License.
         }); 
       }
       
-    /**the different types are 1: sign in on time, 2: sign in other, 3: sign out on time, 4: sign out other
+    /**the different types are 1: in on time, 2: in other, 3: out on time, 4: out other
       */
-      function addTime(type, time = null){
+      function addTime(type){
+      	var nToCol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		var d = new Date();
 		var n = d.getDay();
 		//Saturday and Sunday counted together as weekend
@@ -292,20 +292,20 @@ limitations under the License.
 			inTime = '15:00';
 		} else {
 			inTime = '18:00'; }
-
-		//calculate cell based on i, colToChange; write request to change that cell to inTime
-	} 
-	
-	function test3(){
+		
+		colToChange = nToCol.charAt(colToChange);
+		var studRow_p = studRow + 2;
+		var r = 'test!'+colToChange+ studRow_p.toString();
 		gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-                    range: 'test!B2',
+                    range: r,
                     valueInputOption: 'USER_ENTERED',
-                    values: [["123"]]
+                    values: [[inTime]]
                 }).then(function(response) {
                     console.log(response);
                 });
-	}
+	} 
+
     </script>
 
     <script async defer src="https://apis.google.com/js/api.js"
