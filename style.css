@@ -57,7 +57,7 @@ body{
 }
 
 .AFH-card{
-	height: 10rem; 
+	height: 9rem; 
 	font-size: 2.9em; 
 	color:white; 
 	border: none
@@ -82,13 +82,12 @@ body{
 .card-text{
 	text-align: center; 
 	vertical-align: middle; 
-	line-height: 10rem;
+	line-height: 9rem;
 }
 
 #Video_Motion{
 	text-align: center; 
-	vertical-align: middle; 
-	margin-top: .2em;
+	vertical-align: middle;
 }
 
 #Photography{
