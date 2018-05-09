@@ -141,6 +141,7 @@ limitations under the License.
       // Names of participants and name of the studio they are in
       var studName;
       var studio;
+      var studRow;
 
       /**
        *  On load, called to load the auth2 library and API client library.
@@ -181,6 +182,7 @@ limitations under the License.
           studName = sessionStorage.getItem("studentName");
           studio = sessionStorage.getItem("studioName");
           fillTable();
+          addTime();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -225,6 +227,7 @@ limitations under the License.
 				if (studName == currentName) { 
 					document.getElementById("studentName").innerHTML = studName;
 					found = true;
+					studRow = i;
 					
 					var row = range.values[i];
 					document.getElementById("MIn").innerHTML = row[2];
@@ -256,6 +259,33 @@ limitations under the License.
           appendPre('Error: ' + response.result.error.message);
         }); 
       }
+      
+    /**the different types are 1: sign in on time, 2: sign in other, 3: sign out on time, 4: sign out other
+      */
+      function addTime(type, time = null){
+		var d = new Date();
+		var n = d.getDay();
+		//Saturday and Sunday counted together as weekend
+		if (n==0){
+			n = 6; }
+		
+		var colToChange;
+		var inTime;
+		
+		if (type == 1 || type == 2) {
+			colToChange = 3*(n-1)+2
+		} else {
+			colToChange = 3*(n-1)+3 }
+		
+		if (type == 2 || type == 4) {
+			inTime = d.getHours() + ':' + d.getMinutes();
+		} else if (type == 1) {
+			inTime = '15:00';
+		} else {
+			inTime = '18:00'; }
+
+		//calculate cell based on i, colToChange; write request to change that cell to inTime
+	} 
 
     </script>
 
