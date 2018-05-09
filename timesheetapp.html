@@ -142,7 +142,7 @@ limitations under the License.
 
       // Authorization scopes required by the API; multiple scopes can be
       // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+      var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
       var authorizeButton = document.getElementById('authorize-button');
       var signoutButton = document.getElementById('signout-button');
@@ -191,7 +191,7 @@ limitations under the License.
           studName = sessionStorage.getItem("studentName");
           studio = sessionStorage.getItem("studioName");
           fillTable();
-          addTime();
+          test3();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -295,7 +295,17 @@ limitations under the License.
 
 		//calculate cell based on i, colToChange; write request to change that cell to inTime
 	} 
-
+	
+	function test3(){
+		gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: 'test!B2',
+                    valueInputOption: 'USER_ENTERED',
+                    values: [["123"]]
+                }).then(function(response) {
+                    console.log(response);
+                });
+	}
     </script>
 
     <script async defer src="https://apis.google.com/js/api.js"
