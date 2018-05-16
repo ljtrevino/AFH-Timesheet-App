@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Request Edit</title>
+  <script
+  src="https://code.jquery.com/jquery-2.1.0.min.js"
+  integrity="sha256-8oQ1OnzE2X9v4gpRVRMb1DWHoPHJilbur1LP9ykQ9H0="
+  crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  
+  <link rel='stylesheet prefetch' href='https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/a549aa8780dbda16f6cff545aeabc3d71073911e/build/css/bootstrap-datetimepicker.css'>
+
+  <link rel="stylesheet" href="../style.css">
+  
+</head>
+
+<body>
+<a href="./index.html"><img src="../back-arrow-red.png" style="transform: scale(.6)"/></a>
+<!--Add buttons to initiate auth sequence and sign out-->
+<button id="authorize-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Authorize</button>
+<button id="signout-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Sign Out</button>
+
+
+    <div class="container" style="margin-top: 15vh">
+
+        <div class="row">
+            <div class="col-12 text-center" style="height:4em"></div>
+
+            <div id = "title" class="col-12 text-center" style="font-size: 4em;">
+              MENTOR EDIT
+            </div>
+            <div class="col-12 text-center" style="height:4em"></div>
+        </div>
+
+
+        <div class="form-group row">
+          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">Date of Edit</label>
+            <div class="col-sm-9">
+              <div class="form-group">
+                    <div class="input-group date form-input" id="datetimepicker1">
+                        <input id = "day" type="text" class="form-control" />  <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+        <div class="form-group row">
+          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">Start Time</label>
+            <div class="col-sm-9">
+              <div class="form-group">
+                    <div class="input-group date form-input" id="datetimepicker2">
+                        <input id = "start" type="text" class="form-control" />  <span class="input-group-addon"><span class="glyphicon-time glyphicon"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">End Time</label>
+            <div class="col-sm-9">
+              <div class="form-group">
+                    <div class="input-group date form-input" id="datetimepicker3">
+                        <input id = "end" type="text" class="form-control" />  <span class="input-group-addon"><span class="glyphicon-time glyphicon"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+  
+<!--
+        <div class="form-group row">
+          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">Notes / Reason</label>
+            <div class="col-sm-9">
+              <div class="form-group">
+                    <div>
+                        <input id = "notes" type="text" class="form-control form-input" />  
+                    </div>
+                </div>
+            </div>
+        </div>
+-->
+  
+        
+  
+</div>
+
+<div class="row" style="height: 3rem;"></div>
+         
+        <div class="row" style="height: 3rem;">
+          <a onclick = "addRequest()" type="button" role="button" class="btn btn-lg btn-block red" style="width: 50%; margin-left: 25%; color:white; padding-top: 1.4em;">SUBMIT</a>
+        </div>
+    
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js'></script>
+<script src='https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/a549aa8780dbda16f6cff545aeabc3d71073911e/src/js/bootstrap-datetimepicker.js'></script>
+
+    <script  src="js/index.js"></script>
+    <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                 format: 'MM/DD/YYYY'
+                });
+            });
+        
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
+                    format: 'LT'
+                });
+            });
+        
+            $(function () {
+                $('#datetimepicker3').datetimepicker({
+                    format: 'LT'
+                });
+            });
+    
+      
+     </script>
+     <script type = "text/javascript"> 
+      // Client ID and API key from the Developer Console
+      var CLIENT_ID = '607362006296-la054vb71t7p8ju0ic4rc08ge4lc7j92.apps.googleusercontent.com';
+      var API_KEY = 'AIzaSyAStm_2OiPlEUk0eJIg_UY8mShw6Fn9Fg8';
+
+      // Array of API discovery doc URLs for APIs used by the quickstart
+      var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+
+      // Authorization scopes required by the API; multiple scopes can be
+      // included, separated by spaces.
+      var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+
+      var authorizeButton = document.getElementById('authorize-button');
+      var signoutButton = document.getElementById('signout-button');
+      
+      // Names of participants and name of the studio they are in
+      var studName;
+      var studio;
+      
+      /**
+       *  On load, called to load the auth2 library and API client library.
+       */
+      function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+      }
+
+      /**
+       *  Initializes the API client library and sets up sign-in state
+       *  listeners.
+       */
+      function initClient() {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: DISCOVERY_DOCS,
+          scope: SCOPES
+        }).then(function () {
+          // Listen for sign-in state changes.
+          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+          // Handle the initial sign-in state.
+          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          authorizeButton.onclick = handleAuthClick;
+          signoutButton.onclick = handleSignoutClick;
+        });
+      }
+
+      /**
+       *  Called when the signed in status changes, to update the UI
+       *  appropriately. After a sign-in, the API is called.
+       */
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          authorizeButton.style.display = 'none';
+          signoutButton.style.display = 'block';
+          studName = sessionStorage.getItem("studentName");
+          studio = sessionStorage.getItem("studioName");
+        } else {
+          authorizeButton.style.display = 'block';
+          signoutButton.style.display = 'none';
+        }
+      }
+
+      /**
+       *  Sign in the user upon button click.
+       */
+      function handleAuthClick(event) {
+        gapi.auth2.getAuthInstance().signIn();
+      }
+
+      /**
+       *  Sign out the user upon button click.
+       */
+      function handleSignoutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+      
+      function addRequest(){
+        var day = document.getElementById('day').value;
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        var notes = document.getElementById('notes').value;
+        
+        if (day == '' || start == '' || end == '' || notes == '') {
+        	alert('Please fill in all fields.');
+        } else {
+        	start = (timeConvertor(start)).slice(0, -2);
+        	end = (timeConvertor(end)).slice(0, -2);
+      		gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: 'Requests',
+                    valueInputOption: 'USER_ENTERED',
+                    insertDataOption: 'INSERT_ROWS',
+                    values: [[studName, studio, day, start, end, notes]]
+                }).then(function(response) {
+                    console.log(response);
+                });
+            window.location.href = "../timesheetapp.html";
+      	}	
+	}
+	
+	function timeConvertor(time) {
+    	var PM = time.match('PM') ? true : false
+    
+    	time = time.split(':')
+    	var min = time[1]
+    
+		if (PM) {
+			var hour = 12 + parseInt(time[0],10);
+		} else {
+			var hour = time[0]; 
+		}
+    	var x = hour + ':' + min;
+    	return x;
+	}      
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+</body>
+
+</html>
+
