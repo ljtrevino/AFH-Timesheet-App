@@ -16,7 +16,7 @@ limitations under the License.
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Mentor Approval </title>
+    <title> Mentor Requests </title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 	<link rel="stylesheet" href="style.css">
@@ -26,6 +26,8 @@ limitations under the License.
     <meta charset='utf-8' />
   </head>
   <body> 
+      
+    <a href="mentorapproval.html"><img src="back-arrow-blue.png" style="transform: scale(.6)"/></a>
     <button id="authorize-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Authorize</button>
 	<button id="signout-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Sign Out</button>
 
@@ -39,62 +41,22 @@ limitations under the License.
         <div class="row">
           <div class="col">
             <table style="empty-cells: show" class="table table-bordered table-hover-cells text-center">
-              <tbody>
-                <tr class="green" style="color:black;">
-                  <th style="border-top: 1px solid #FFFFFF; border-left: 1px solid #FFFFFF; background-color: white;" rowspan="1"></th>
-                  <th colspan="2">MONDAY</th>
-                  <th colspan="2">TUESDAY</th>
-                  <th colspan="2">WEDNESDAY</th>
-                  <th colspan="2">THURSDAY</th>
-                  <th colspan="2">FRIDAY</th>
-                  <th colspan="2">WEEKEND</th>
-                  <th style="border-top: 1px solid #FFFFFF; border-right: 1px solid #FFFFFF; background-color: white;" rowspan="1"></th>
+              <thead>
+                <tr class="blue" style="color:black;">
+                  <th>STUDENT</th>
+                  <th>REQUEST</th>
+                  <th>DENY</th>
+                  <th>APPROVE</th>
                 </tr>
+              </thead>
+                <tbody>
                 <tr style="height:3rem;">
-                  <th rowspan="1" class="green">STUDENT</th>
-                  <th>IN</th>
-                  <th>OUT</th>
-                  <th>IN</th>
-                  <th>OUT</th>
-                  <th>IN</th>
-                  <th>OUT</th>
-                  <th>IN</th>
-                  <th>OUT</th>
-                  <th>IN</th>
-                  <th>OUT</th>
-                  <th>IN</th>
-                  <th>OUT</th>
-                  <th rowspan="1" class="green">EDIT</th>
-                  <th rowspan="1" class="green">APPROVE</th>
-                </tr>
-
-                <tr style="height:3em">
                   <td rowspan="2"> STUDENT NAME </td>
-                  <td id = "MIn"></td>
-                  <td id = "MOut"></td>
-                  <td id = "TIn"></td>
-                  <td id = "TOut"></td>
-                  <td id = "WIn"></td>
-                  <td id = "WOut"></td>
-                  <td id = "ThIn"></td>
-                  <td id = "ThOut"></td>
-                  <td id = "FIn"></td>
-                  <td id = "FOut"></td>
-                  <td id = "WkIn"></td>
-                  <td id = "WkOut"></td>
-                  <td rowspan="2"> <a href="RequestEdit/mentoredit.html"><button id="editbutton">Edit</button></a></td>
+                  <td rowspan="2"> REQUEST TEXT</td>
+                  <td rowspan="2"> <button id="editbutton" style="margin-bottom: 15px;">Deny</button></td>
                   <td rowspan="2"> <button id="approvebutton">Approve</button> </td>
                 </tr>
-
-                <tr style="height:3em">
-                  <td id = "MTotal" colspan="2"></td>
-                  <td id = "TTotal" colspan="2"></td>
-                  <td id = "WTotal" colspan="2"></td>
-                  <td id = "ThTotal" colspan="2"></td>
-                  <td id = "FTotal" colspan="2"></td>
-                  <td id = "WkTotal" colspan="2"></td>
-                </tr>
-                  
+            
               </tbody>
             </table>
           </div>
@@ -104,20 +66,7 @@ limitations under the License.
         </div>
 
         
-        <div class="row">
-            <div class="col">
-            </div>
-            <div class="col-4">
-                <a role="button" href="mentorrequests.html" type="button btn-lg" class="btn btn-secondary green line-height" style="margin-top: 30px; display:block; color:black; border: #f29574;">ADDITIONAL REQUESTS</a>
-            </div>
-            <div class="col">
-            </div>
-            <div class="col-4">
-                <a role="button" href="mentorlogin.html" type="button btn-lg" class="btn btn-secondary green line-height" style="margin-top: 30px; display:block; color:black; border: #f29574;">LOGOUT</a>
-            </div>
-            <div class="col">
-            </div>
-        </div>
+       
       </div>
 
     <script type="text/javascript">
