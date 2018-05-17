@@ -66,8 +66,6 @@ limitations under the License.
           <a onclick = "chooseName()" role="button" class="btn btn-lg btn-block login-btn grey">LOGIN</a>
         </div>
       </div>
-      <p id="content"></p>
-
     
 <script type="text/javascript">
       // Client ID and API key from the Developer Console
@@ -140,18 +138,6 @@ limitations under the License.
        */
       function handleSignoutClick(event) {
         gapi.auth2.getAuthInstance().signOut();
-      }
-
-      /**
-       * Append a pre element to the body containing the given message
-       * as its text node. Used to display the results of the API call.
-       *
-       * @param {string} message Text to be placed in pre element.
-       */
-      function appendPre(message) {
-        var p = document.getElementById('content');
-        var textContent = document.createTextNode(message + '\n');
-        p.appendChild(textContent);
       }
       
       function chooseName(){
