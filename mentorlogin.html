@@ -83,6 +83,7 @@ limitations under the License.
       var signoutButton = document.getElementById('signout-button');
 	  
 	  var pw = {'Mentor Name 1':'123', 'Mentor Name 2':'234'};
+	  var studio = {'Mentor Name 1':'Graphics', 'Mentor Name 2':'Photography'};
       /**
        *  On load, called to load the auth2 library and API client library.
        */
@@ -149,6 +150,7 @@ limitations under the License.
       		if (code == pw[nameSelect]) {
     
       			sessionStorage.setItem("mentorName", nameSelect);
+      			sessionStorage.setItem("studio", studio[nameSelect]);
       			/* window.location.href = 'timesheetapp.html'; */
       			alert('Success');
       		} else {
