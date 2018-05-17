@@ -54,7 +54,7 @@ limitations under the License.
         <div class="form-group row">
           <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Passcode</label>
             <div class="col-sm-10">
-              <input type="code" class="form-control form-control-lg" id="colFormLabelLg" placeholder="">
+              <input id = "notes" type="text" class="form-control form-control-lg form-input">
             </div>
         </div>
 
@@ -122,7 +122,6 @@ limitations under the License.
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
           studio = sessionStorage.getItem("studioSelection");
-          document.getElementById("title").innerHTML = (studio + ' login').toUpperCase();
           getNames();
         } else {
           authorizeButton.style.display = 'block';

@@ -1,0 +1,311 @@
+<!--
+Copyright 2018 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Timesheet App </title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="style.css">
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <meta charset='utf-8' />
+  </head>
+  <body>
+    <a href="login.html"><img src="back-arrow-green.png" style="transform: scale(.6)"/></a>
+    <button id="authorize-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Authorize</button>
+	<button id="signout-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Sign Out</button>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" style="height:4em"></div>
+
+            <div id = "studentName" class="col-12 text-center" style="font-size: 4em;">
+            </div>
+
+            <div class="col-12 text-center" style="height:4em"></div>
+        </div>
+  
+        <div class="row">
+          <div class="col">
+            <table class="table table-bordered table-hover-cells text-center">
+              <thead class="green" style="color:black;">
+                <tr>
+                  <th scope="col" colspan="2">MONDAY</th>
+                  <th scope="col" colspan="2">TUESDAY</th>
+                  <th scope="col" colspan="2">WEDNESDAY</th>
+                  <th scope="col" colspan="2">THURSDAY</th>
+                  <th scope="col" colspan="2">FRIDAY</th>
+                  <th scope="col" colspan="2">WEEKEND</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="height:2em">
+                  <td>IN</td>
+                  <td>OUT</td>
+                  <td>IN</td>
+                  <td>OUT</td>
+                  <td>IN</td>
+                  <td>OUT</td>
+                  <td>IN</td>
+                  <td>OUT</td>
+                  <td>IN</td>
+                  <td>OUT</td>
+                  <td>IN</td>
+                  <td>OUT</td>
+                </tr>
+
+                <tr style="height:6em">
+                  <td id = "MIn"></td>
+                  <td id = "MOut"></td>
+                  <td id = "TIn"></td>
+                  <td id = "TOut"></td>
+                  <td id = "WIn"></td>
+                  <td id = "WOut"></td>
+                  <td id = "ThIn"></td>
+                  <td id = "ThOut"></td>
+                  <td id = "FIn"></td>
+                  <td id = "FOut"></td>
+                  <td id = "WkIn"></td>
+                  <td id = "WkOut"></td>
+                </tr>
+
+                <tr style="height:6em">
+                  <td id = "MTotal" colspan="2"></td>
+                  <td id = "TTotal" colspan="2"></td>
+                  <td id = "WTotal" colspan="2"></td>
+                  <td id = "ThTotal" colspan="2"></td>
+                  <td id = "FTotal" colspan="2"></td>
+                  <td id = "WkTotal" colspan="2"></td>
+                </tr>
+                  
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row" style="height: 3rem;">
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <a onclick = "addTime(1)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN ON TIME</a>
+            </div>
+            <div class="col">
+                <a onclick = "addTime(2)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN OTHER</a>
+            </div>
+            
+            <div class="col">
+                <a onclick = "addTime(3)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT ON TIME</a>
+            </div>
+            <div class="col">
+                <a onclick = "addTime(4)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT OTHER</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col">
+                <a role="button" href="RequestEdit/index.html" type="button btn-lg" class="btn btn-secondary green line-height" style="margin-top: 30px; display:block; color:black; border: #f29574;">LOG EXTRA HOURS</a>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+      </div>
+
+    <script type="text/javascript">
+      // Client ID and API key from the Developer Console
+      var CLIENT_ID = '607362006296-la054vb71t7p8ju0ic4rc08ge4lc7j92.apps.googleusercontent.com';
+      var API_KEY = 'AIzaSyAStm_2OiPlEUk0eJIg_UY8mShw6Fn9Fg8';
+
+      // Array of API discovery doc URLs for APIs used by the quickstart
+      var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+
+      // Authorization scopes required by the API; multiple scopes can be
+      // included, separated by spaces.
+      var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+
+      var authorizeButton = document.getElementById('authorize-button');
+      var signoutButton = document.getElementById('signout-button');
+      
+      // Names of participants and name of the studio they are in
+      var studName;
+      var studio;
+      var studRow;
+
+      /**
+       *  On load, called to load the auth2 library and API client library.
+       */
+      function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+      }
+
+      /**
+       *  Initializes the API client library and sets up sign-in state
+       *  listeners.
+       */
+      function initClient() {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: DISCOVERY_DOCS,
+          scope: SCOPES
+        }).then(function () {
+          // Listen for sign-in state changes.
+          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+          // Handle the initial sign-in state.
+          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          authorizeButton.onclick = handleAuthClick;
+          signoutButton.onclick = handleSignoutClick;
+        });
+      }
+
+      /**
+       *  Called when the signed in status changes, to update the UI
+       *  appropriately. After a sign-in, the API is called.
+       */
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          authorizeButton.style.display = 'none';
+          signoutButton.style.display = 'block';
+          studName = sessionStorage.getItem("studentName");
+          studio = sessionStorage.getItem("studioName");
+          fillTable();
+        } else {
+          authorizeButton.style.display = 'block';
+          signoutButton.style.display = 'none';
+        }
+      }
+
+      /**
+       *  Sign in the user upon button click.
+       */
+      function handleAuthClick(event) {
+        gapi.auth2.getAuthInstance().signIn();
+      }
+
+      /**
+       *  Sign out the user upon button click.
+       */
+      function handleSignoutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+
+      /**
+       * Append a pre element to the body containing the given message
+       * as its text node. Used to display the results of the API call.
+       *
+       * @param {string} message Text to be placed in pre element.
+       */
+      function appendPre(message) {
+        var p = document.getElementById('content');
+        var textContent = document.createTextNode(message + '\n');
+        p.appendChild(textContent);
+      }
+      
+      function fillTable() {
+      	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: studio+'!A2:AA',
+        }).then(function(response) {
+        	var range = response.result;
+        	var found = false;
+          	for (i = 0; i < range.values.length; i++) {
+				var currentName = range.values[i][0] + " " + range.values[i][1];
+				if (studName == currentName) { 
+					document.getElementById("studentName").innerHTML = studName;
+					found = true;
+					studRow = i;
+					
+					var row = range.values[i];
+					document.getElementById("MIn").innerHTML = row[2];
+					document.getElementById("MOut").innerHTML = row[3];
+					document.getElementById("MTotal").innerHTML = row[4];
+					document.getElementById("TIn").innerHTML = row[5];
+					document.getElementById("TOut").innerHTML = row[6];
+					document.getElementById("TTotal").innerHTML = row[7];
+					document.getElementById("WIn").innerHTML = row[8];
+					document.getElementById("WOut").innerHTML = row[9];
+					document.getElementById("WTotal").innerHTML = row[10];
+					document.getElementById("ThIn").innerHTML = row[11];
+					document.getElementById("ThOut").innerHTML = row[12];
+					document.getElementById("ThTotal").innerHTML = row[13];
+					document.getElementById("FIn").innerHTML = row[14];
+					document.getElementById("FOut").innerHTML = row[15];
+					document.getElementById("FTotal").innerHTML = row[16];
+					document.getElementById("WkIn").innerHTML = row[17];
+					document.getElementById("WkOut").innerHTML = row[18];
+					document.getElementById("WkTotal").innerHTML = row[19];     
+					break;
+				}      	
+          } 
+          if (found == false) {
+      		document.getElementById("studentName").innerHTML = "Error: student not found";
+      		return None;
+      		}
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        }); 
+      }
+      
+    /**the different types are 1: in on time, 2: in other, 3: out on time, 4: out other
+      */
+      function addTime(type){
+      	var nToCol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var d = new Date();
+		var n = d.getDay();
+		//Saturday and Sunday counted together as weekend
+		if (n==0){
+			n = 6; }
+		
+		var colToChange;
+		var inTime;
+		
+		if (type == 1 || type == 2) {
+			colToChange = 3*(n-1)+2
+		} else {
+			colToChange = 3*(n-1)+3 }
+		
+		if (type == 2 || type == 4) {
+			inTime = d.getHours() + ':' + d.getMinutes();
+		} else if (type == 1) {
+			inTime = '15:00';
+		} else {
+			inTime = '18:00'; }
+		
+		colToChange = nToCol.charAt(colToChange);
+		var studRow_p = studRow + 2;
+		var r = studio + '!'+colToChange+ studRow_p.toString();
+		gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: r,
+                    valueInputOption: 'USER_ENTERED',
+                    values: [[inTime]]
+                }).then(function(response) {
+                    console.log(response);
+                });
+	} 
+
+    </script>
+
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
+</html>
