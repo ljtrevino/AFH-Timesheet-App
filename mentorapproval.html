@@ -214,17 +214,17 @@ limitations under the License.
           			if (j == 1) {
           				var txt = document.createTextNode(row[0]+' '+row[1]);
           			} else {
-          				var txt = document.createTextNode(row[j]);
-          			}
+          				var txt = document.createTextNode(row[j]); }
           			td.appendChild(txt);
           			tr.appendChild(td);
           		}
           		
           		var btn1 = document.createElement('BUTTON');
           		var t = document.createTextNode('Edit');
-          		btn1.appendChild(t); 
+          		btn1.appendChild(t);
+          		btn1.name = i.toString(); 
           		btn1.onclick = function(){
-          			test('hey');return false; };
+          			getId(btn1);return false; };
           		var td = document.createElement("td");
           		td.appendChild(btn1);
           		tr.appendChild(td); 
@@ -249,6 +249,10 @@ limitations under the License.
       function test(a) {
       	alert(a);
       }
+      
+      function  getId(element) {
+    		alert("row" + element.parentNode.parentNode.rowIndex + " - column" + element.parentNode.cellIndex);
+		}
 
     </script>
 
