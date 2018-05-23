@@ -94,8 +94,7 @@ limitations under the License.
                    <td rowspan="2"> <a href="RequestEdit/mentoredit.html"><button id="editbutton">Edit</button></a></td>
                   <td rowspan="2"> <button id="approvebutton">Approve</button> </td>
                 </tr> -->
-
-                  
+          
               </tbody>
             </table>
           </div>
@@ -210,7 +209,7 @@ limitations under the License.
           	for (i = 0; i < range.values.length; i++) {
           		var row = range.values[i];
           		var tr = document.createElement("tr");
-          		for (var j = 1; j < row.length-6; j++) {
+          		for (var j = 1; j < 21; j++) {
           			var td = document.createElement("td");
           			if (j == 1) {
           				var txt = document.createTextNode(row[0]+' '+row[1]);
@@ -220,12 +219,35 @@ limitations under the License.
           			td.appendChild(txt);
           			tr.appendChild(td);
           		}
+          		
+          		var btn1 = document.createElement('BUTTON');
+          		var t = document.createTextNode('Edit');
+          		btn1.appendChild(t); 
+          		btn1.onclick = function(){
+          			test('hey');return false; };
+          		var td = document.createElement("td");
+          		td.appendChild(btn1);
+          		tr.appendChild(td); 
+          		
+          		var btn2 = document.createElement('BUTTON');
+          		var t = document.createTextNode('Approve');
+          		btn2.appendChild(t); 
+          		btn2.onclick = function(){
+          			test('no');return false; };
+          		var td = document.createElement("td");
+          		td.appendChild(btn2);
+          		tr.appendChild(td); 
+          		
           		tbody.appendChild(tr);
-          		table.appendChild(tbody);
+          		table.appendChild(tbody); 
           	}
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
         }); 
+      }
+      
+      function test(a) {
+      	alert(a);
       }
 
     </script>
