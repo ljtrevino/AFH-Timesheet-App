@@ -51,6 +51,7 @@ limitations under the License.
                   <th scope="col" colspan="2">THURSDAY</th>
                   <th scope="col" colspan="2">FRIDAY</th>
                   <th scope="col" colspan="2">WEEKEND</th>
+                  <th scope="col" colspan="2">EXTRA HOURS</th>
                 </tr>
               </thead>
               <tbody>
@@ -91,6 +92,7 @@ limitations under the License.
                   <td id = "ThTotal" colspan="2"></td>
                   <td id = "FTotal" colspan="2"></td>
                   <td id = "WkTotal" colspan="2"></td>
+                  <td id = "extra" ></td>
                 </tr>
                   
               </tbody>
@@ -106,21 +108,21 @@ limitations under the License.
                 <a onclick = "addTime(1)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN ON TIME</a>
             </div>
             <div class="col">
-                <a onclick = "addTime(2)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN OTHER</a>
+                <a onclick = "addTime(2)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">IN AT CURRENT TIME</a>
             </div>
             
             <div class="col">
                 <a onclick = "addTime(3)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT ON TIME</a>
             </div>
             <div class="col">
-                <a onclick = "addTime(4)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT OTHER</a>
+                <a onclick = "addTime(4)" role="button" href="#" type="button btn-lg" class="btn btn-secondary green line-height" style="margin:0,auto; display:block; color:black; border: #f29574;">OUT AT CURRENT TIME</a>
             </div>
         </div>
         <div class="row">
             <div class="col">
             </div>
             <div class="col">
-                <a role="button" href="RequestEdit/index.html" type="button btn-lg" class="btn btn-secondary green line-height" style="margin-top: 30px; display:block; color:black; border: #f29574;">LOG EXTRA HOURS</a>
+                <a role="button" href="RequestEdit/index.html" type="button btn-lg" class="btn btn-secondary green line-height" style="margin-top: 30px; display:block; color:black; border: #f29574;">ADD/EDIT HOURS</a>
             </div>
             <div class="col">
             </div>
@@ -238,7 +240,8 @@ limitations under the License.
 					document.getElementById("FTotal").innerHTML = row[16];
 					document.getElementById("WkIn").innerHTML = row[17];
 					document.getElementById("WkOut").innerHTML = row[18];
-					document.getElementById("WkTotal").innerHTML = row[19];     
+					document.getElementById("WkTotal").innerHTML = row[19];
+					document.getElementById("extra").innerHTML = row[20];       
 					break;
 				}      	
           } 
@@ -270,7 +273,11 @@ limitations under the License.
 			colToChange = 3*(n-1)+3 }
 		
 		if (type == 2 || type == 4) {
-			inTime = d.getHours() + ':' + d.getMinutes();
+			var min = d.getMinutes();
+			if (d.getMinutes()<10) {
+				min = "0" + d.getMinutes();
+			}
+			inTime = d.getHours() + ':' + min;
 		} else if (type == 1) {
 			inTime = '15:00';
 		} else {

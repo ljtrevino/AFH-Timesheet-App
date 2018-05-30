@@ -127,17 +127,17 @@ limitations under the License.
       function clearSheet(studio) {
       		gapi.client.sheets.spreadsheets.values.get({
           		spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-          		range: studio+'!A2:AA',
+          		range: studio+'!A2:AC',
         	}).then(function(response) {
           		var range = response.result;
           		var numRows = range.values.length;
           		var input = new Array(numRows);
           		for (j = 0; j < input.length; j++) {
-          			input[j] = [null, null, '', '', null, '', '', null, '', '', null, '', '', null, '', '', null, '', '', null];
+          			input[j] = [null, null, '', '', null, '', '', null, '', '', null, '', '', null, '', '', null, '', '', null, '', null, null, null, null, null, null, null, ''];
           		}
           		gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-                    range: studio+'!A2:T',
+                    range: studio+'!A2:AC',
                     valueInputOption: 'USER_ENTERED',
                     values: input
                 }).then(function(response) {

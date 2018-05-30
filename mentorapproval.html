@@ -36,6 +36,40 @@ limitations under the License.
             </div>
             <div class="col-12 text-center" style="height:4em"></div>
         </div>
+        
+        <div class="row">
+            <div class="col-12 text-center" style="height:4em"></div>
+
+            <div class="col-12 text-center" style="height:4em"></div>
+        </div>
+  
+        <div class="row">
+          <div class="col">
+            <table id = "requests" style="empty-cells: show" class="table table-bordered table-hover-cells text-center">
+              <thead>
+                <tr class="blue" style="color:black;">
+                  <th>STUDENT</th>
+                  <th>DATE OF REQUESTED CHANGE/ADDITIONAL HOURS</th>
+                  <th>REQUESTED START TIME</th>
+                  <th>REQUESTED END TIME</th>
+                  <th>NOTES</th>
+                  <th>APPROVE</th>
+                </tr>
+              </thead>
+                <tbody>
+                <tr style="height:3rem;">
+                  <td rowspan="2"> STUDENT NAME </td>
+                  <td rowspan="2"> REQUEST TEXT</td>
+                  <td rowspan="2"> <button id="approvebutton">Approve</button> </td>
+                </tr>
+            
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row" style="height: 3rem;">
+        </div>
   
         <div class="row">
           <div class="col">
@@ -72,28 +106,11 @@ limitations under the License.
                   <th>IN</th>
                   <th>OUT</th>
                   <th>TOTAL</th>
+                  <th rowspan="1" class="green">EXTRA HOURS</th>
                   <th rowspan="1" class="green">WEEK TOTAL</th>
                   <th rowspan="1" class="green">EDIT</th>
                   <th rowspan="1" class="green">APPROVE</th>
                 </tr>
-
-                <!-- <tr style="height:3em">
-                  <td rowspan="2"> STUDENT NAME </td>
-                  <td id = "MIn"></td>
-                  <td id = "MOut"></td>
-                  <td id = "TIn"></td>
-                  <td id = "TOut"></td>
-                  <td id = "WIn"></td>
-                  <td id = "WOut"></td>
-                  <td id = "ThIn"></td>
-                  <td id = "ThOut"></td>
-                  <td id = "FIn"></td>
-                  <td id = "FOut"></td>
-                  <td id = "WkIn"></td>
-                  <td id = "WkOut"></td>
-                   <td rowspan="2"> <a href="RequestEdit/mentoredit.html"><button id="editbutton">Edit</button></a></td>
-                  <td rowspan="2"> <button id="approvebutton">Approve</button> </td>
-                </tr> -->
           
               </tbody>
             </table>
@@ -105,11 +122,6 @@ limitations under the License.
 
         
         <div class="row">
-            <div class="col">
-            </div>
-            <div class="col-4">
-                <a role="button" href="mentorrequests.html" type="button btn-lg" class="btn btn-secondary green line-height" style="margin-top: 30px; display:block; color:black; border: #f29574;">ADDITIONAL REQUESTS</a>
-            </div>
             <div class="col">
             </div>
             <div class="col-4">
@@ -177,7 +189,8 @@ limitations under the License.
           studio = sessionStorage.getItem("studioName");
           
           document.getElementById("studioName").innerHTML = studio;
-          fillTable();
+          fillRequestsTable();
+          fillTimeTable();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -198,18 +211,19 @@ limitations under the License.
         gapi.auth2.getAuthInstance().signOut();
       }
       
-      function fillTable() {
+      function fillRequestsTable() {
       	gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-          range: studio+'!A2:AA',
+          range: 'Requests!A2:F',
         }).then(function(response) {
         	var range = response.result;
-        	var table = document.getElementById("times");
+        	
+        	var table = document.getElementById("requests");
         	var tbody = document.createElement("tbody");
-          	for (i = 0; i < range.values.length; i++) {
+          	for (i = 0; i < range.values.length; ++i) {
           		var row = range.values[i];
           		var tr = document.createElement("tr");
-          		for (var j = 1; j < 21; j++) {
+          		for (var j = 1; j < 22; j++) {
           			var td = document.createElement("td");
           			if (j == 1) {
           				var txt = document.createTextNode(row[0]+' '+row[1]);
@@ -219,23 +233,9 @@ limitations under the License.
           			tr.appendChild(td);
           		}
           		
-          		var btn1 = document.createElement('BUTTON');
-          		var t = document.createTextNode('Edit');
-          		btn1.appendChild(t);
-          		btn1.name = i.toString(); 
-          		btn1.onclick = function(){
-          			getId(btn1);return false; };
+          		newButton(i);
           		var td = document.createElement("td");
-          		td.appendChild(btn1);
-          		tr.appendChild(td); 
-          		
-          		var btn2 = document.createElement('BUTTON');
-          		var t = document.createTextNode('Approve');
-          		btn2.appendChild(t); 
-          		btn2.onclick = function(){
-          			test('no');return false; };
-          		var td = document.createElement("td");
-          		td.appendChild(btn2);
+          		td.appendChild(editBtnTable[i]);
           		tr.appendChild(td); 
           		
           		tbody.appendChild(tr);
@@ -246,14 +246,86 @@ limitations under the License.
         }); 
       }
       
-      function test(a) {
-      	alert(a);
+      var editBtnTable = [];
+      var appBtnTable = [];
+      function fillTimeTable() {
+      	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: studio+'!A2:AA',
+        }).then(function(response) {
+        	var range = response.result;
+        	
+        	var table = document.getElementById("times");
+        	var tbody = document.createElement("tbody");
+          	for (i = 0; i < range.values.length; ++i) {
+          		var row = range.values[i];
+          		var tr = document.createElement("tr");
+          		for (var j = 1; j < 22; j++) {
+          			var td = document.createElement("td");
+          			if (j == 1) {
+          				var txt = document.createTextNode(row[0]+' '+row[1]);
+          			} else {
+          				var txt = document.createTextNode(row[j]); }
+          			td.appendChild(txt);
+          			tr.appendChild(td);
+          		}
+          		
+          		newButton(i);
+          		var td = document.createElement("td");
+          		td.appendChild(editBtnTable[i]);
+          		tr.appendChild(td); 
+          		
+          		var td = document.createElement("td");
+          		td.appendChild(appBtnTable[i]);
+          		tr.appendChild(td); 
+          		
+          		tbody.appendChild(tr);
+          		table.appendChild(tbody); 
+          	}
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        }); 
+      }
+      
+      function newButton(i) {
+      	 editBtnTable[i] = document.createElement('BUTTON');
+      	 var t = document.createTextNode('Edit');
+      	 editBtnTable[i].appendChild(t);
+      	 editBtnTable[i].name = i.toString(); 
+      	 editBtnTable[i].onclick = function(){
+      	 	edit(editBtnTable[i]);return false; };
+      	 	
+      	 appBtnTable[i] = document.createElement('BUTTON');
+      	 var t = document.createTextNode('Approve');
+      	 appBtnTable[i].appendChild(t);
+      	 appBtnTable[i].name = i.toString(); 
+      	 appBtnTable[i].onclick = function(){
+      	 	approve(appBtnTable[i]);return false; };
       }
       
       function  getId(element) {
-    		alert("row" + element.parentNode.parentNode.rowIndex + " - column" + element.parentNode.cellIndex);
-		}
-
+    		/*alert("row" + element.parentNode.parentNode.rowIndex + " - column" + element.parentNode.cellIndex);*/
+    		return element.parentNode.parentNode.rowIndex;
+	  }
+	  
+	  function edit(element) {
+	  		var row = getId(element);
+	  		alert('still working on it');
+	  		window.location.href = 'mentorrequests.html';
+	  }
+	  
+	  function approve(element){
+	  		var row = getId(element);
+	  		
+	  		gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: studio+'!AC'+row.toString(),
+                    valueInputOption: 'USER_ENTERED',
+                    values: [['Yes']]
+                }).then(function(response) {
+                    console.log(response);
+                });
+	  }
     </script>
 
     <script async defer src="https://apis.google.com/js/api.js"
