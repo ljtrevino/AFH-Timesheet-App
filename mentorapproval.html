@@ -53,17 +53,10 @@ limitations under the License.
                   <th>REQUESTED START TIME</th>
                   <th>REQUESTED END TIME</th>
                   <th>NOTES</th>
-                  <th>APPROVE</th>
+                  <th>APPROVE AND OVERWRITE CURRENT TIMESHEET HOURS </th>
+                  <th>APPROVE AND ADD AS EXTRA HOURS </th>
                 </tr>
               </thead>
-                <tbody>
-                <tr style="height:3rem;">
-                  <td rowspan="2"> STUDENT NAME </td>
-                  <td rowspan="2"> REQUEST TEXT</td>
-                  <td rowspan="2"> <button id="approvebutton">Approve</button> </td>
-                </tr>
-            
-              </tbody>
             </table>
           </div>
         </div>
@@ -211,6 +204,8 @@ limitations under the License.
         gapi.auth2.getAuthInstance().signOut();
       }
       
+      var requestOverwriteBtn = [];
+      var requestExtraBtn = [];
       function fillRequestsTable() {
       	gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
@@ -223,19 +218,27 @@ limitations under the License.
           	for (i = 0; i < range.values.length; ++i) {
           		var row = range.values[i];
           		var tr = document.createElement("tr");
-          		for (var j = 1; j < 22; j++) {
+          		for (var j = 1; j < 6; j++) {
           			var td = document.createElement("td");
           			if (j == 1) {
-          				var txt = document.createTextNode(row[0]+' '+row[1]);
+          				var txt = document.createTextNode(row[0]);
           			} else {
           				var txt = document.createTextNode(row[j]); }
           			td.appendChild(txt);
           			tr.appendChild(td);
           		}
           		
-          		newButton(i);
+          		requestOverwriteApp(i);
           		var td = document.createElement("td");
-          		td.appendChild(editBtnTable[i]);
+          		td.appendChild(requestOverwriteBtn[i]);
+          		tr.appendChild(td); 
+          		
+          		var d = new Date();
+          		var x = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
+          		requestExtraApp(i, dateDifference(row[2], x, (d.getDay()+6)%7));
+          		
+          		var td = document.createElement("td");
+          		td.appendChild(requestExtraBtn[i]);
           		tr.appendChild(td); 
           		
           		tbody.appendChild(tr);
@@ -287,6 +290,56 @@ limitations under the License.
         }); 
       }
       
+      /*input is date in month/day/year format*/
+      function dateDifference(d1, d2, weekday){
+      	var numDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      	var s1 = d1.split("/");
+      	var s2 = d2.split("/");
+      	for (var i = 0; i < s1.length; i++) {
+      		s1[i] = parseInt(s1[i], 10);
+      		s2[i] = parseInt(s2[i], 10);
+      	}
+      	if (Math.abs(s2[2]-s1[2]) > 1 || Math.abs(s2[0]-s1[0]) > 1){
+      		return false;
+      	} else if (Math.abs(s2[2]-s1[2]) == 1) {
+      		if (s1[0] != 12 || s2[0] != 1) {
+      			return false;
+      		} else if (weekday >= s2[1] + 31 - s1[1] && s2[1] + 31 - s1[1] >= 0) {
+      			return true;
+      		} return false;
+      	} else if (Math.abs(s2[0]-s1[0]) == 1) {
+      		if (weekday >= s2[1] + numDays[s1[0]-1] - s1[1] && s2[1] + 31 - s1[1] >= 0) {
+      			return true;
+      		}
+      		return false;
+      	} else if ((weekday >= s2[1]-s1[1] && s2[1]-s1[1]>= 0) || Math.abs(s1[1] - s2[1]) <= 6-weekday){
+    
+      		return true; }
+      	return false;
+      }
+      
+      function requestOverwriteApp(i) {
+      	 requestOverwriteBtn[i] = document.createElement('BUTTON');
+      	 var t = document.createTextNode('Approve');
+      	 requestOverwriteBtn[i].appendChild(t);
+      	 requestOverwriteBtn[i].name = i.toString(); 
+      	 requestOverwriteBtn[i].onclick = function(){
+      	 	edit(requestOverwriteBtn[i]);return false; };
+      }
+      
+      function requestExtraApp(i, this_week) {
+      	if (this_week) {
+      		requestExtraBtn[i] = document.createElement('BUTTON');
+      	 	var t = document.createTextNode('Approve');
+      	 	requestExtraBtn[i].appendChild(t);
+      	 	requestExtraBtn[i].name = i.toString(); 
+      	 	requestExtraBtn[i].onclick = function(){
+      	 		edit(requestExtraBtn[i]);return false; };
+      	} else {
+      		requestExtraBtn[i] = document.createTextNode('');     		
+      	}
+    }
+      
       function newButton(i) {
       	 editBtnTable[i] = document.createElement('BUTTON');
       	 var t = document.createTextNode('Edit');
@@ -308,6 +361,12 @@ limitations under the License.
     		return element.parentNode.parentNode.rowIndex;
 	  }
 	  
+	  function editSheet(){
+	  }
+	  
+	  function addExtra(){
+	  }
+	  
 	  function edit(element) {
 	  		var row = getId(element);
 	  		alert('still working on it');
@@ -316,7 +375,6 @@ limitations under the License.
 	  
 	  function approve(element){
 	  		var row = getId(element);
-	  		
 	  		gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
                     range: studio+'!AC'+row.toString(),

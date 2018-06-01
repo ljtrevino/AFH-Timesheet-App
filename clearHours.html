@@ -40,6 +40,9 @@ limitations under the License.
         <div class="row height-3">
           <a onclick = "clearHours()" role="button" class="btn btn-lg btn-block login-btn grey">CLEAR HOURS</a>
         </div>
+        <div class="row height-3">
+          <a onclick = "clearRequests()" role="button" class="btn btn-lg btn-block login-btn grey">CLEAR REQUESTS</a>
+        </div>
       </div>
     
 <script type="text/javascript">
@@ -58,7 +61,6 @@ limitations under the License.
       var signoutButton = document.getElementById('signout-button');
       
       var studios = ["Graphics", "Video & Motion", "Photography", "3D Design", "Painting 1", "Painting 2", "Painting 3", "Painting 4", "Painting 5", "Painting 6"];
-      var test = ["test"];
 
       /**
        *  On load, called to load the auth2 library and API client library.
@@ -138,6 +140,30 @@ limitations under the License.
           		gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
                     range: studio+'!A2:AC',
+                    valueInputOption: 'USER_ENTERED',
+                    values: input
+                }).then(function(response) {
+                    console.log(response);
+                });
+          	}, function(response) {
+			  alert(response.result.error.message);
+			});  
+      }
+      
+      function clearRequests() {
+      		gapi.client.sheets.spreadsheets.values.get({
+          		spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          		range: 'Requests!A2:G',
+        	}).then(function(response) {
+          		var range = response.result;
+          		var numRows = range.values.length;
+          		var input = new Array(numRows);
+          		for (j = 0; j < input.length; j++) {
+          			input[j] = ['', '', '', '', '', ''];
+          		}
+          		gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: 'Requests!A2:F',
                     valueInputOption: 'USER_ENTERED',
                     values: input
                 }).then(function(response) {
