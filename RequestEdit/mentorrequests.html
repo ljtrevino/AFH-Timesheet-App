@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Request Edit</title>
+  <title>Mentor Edit</title>
   <script
   src="https://code.jquery.com/jquery-2.1.0.min.js"
   integrity="sha256-8oQ1OnzE2X9v4gpRVRMb1DWHoPHJilbur1LP9ykQ9H0="
@@ -37,14 +37,28 @@
             <div class="col-12 text-center" style="height:4em"></div>
 
             <div id = "title" class="col-12 text-center" style="font-size: 4em;">
-              MENTOR EDIT
+              REQUEST EDIT
+            </div>
+            <div class="col-12 text-center" style="height:4em"></div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 text-center" style="height:4em"></div>
+
+            <div class="col-12 text-center" style="font-size: 1em;">
+              Edit timesheets directly by selecting the day the teen worked extra hours
+              or the day their time was recorded incorrectly as well as the correct start and end time.
+              You can directly add these hours into the teen's "extra hours" column for this week, 
+              which should be done if the edited hours are from a previous work week. *IMPORTANT:
+              The override option writes over the current hours in the teen's timesheet for that day of the week. 
+              You should only use this option if you are editing a start/end time from this week.
             </div>
             <div class="col-12 text-center" style="height:4em"></div>
         </div>
 
 
         <div class="form-group row">
-          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">Date of Edit</label>
+          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">Date of Edit/Extra Work</label>
             <div class="col-sm-9">
               <div class="form-group">
                     <div class="input-group date form-input" id="datetimepicker1">
@@ -76,29 +90,17 @@
             </div>
         </div>
   
-  
-<!--
-        <div class="form-group row">
-          <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg" style="font-size: 1.32em;">Notes / Reason</label>
-            <div class="col-sm-9">
-              <div class="form-group">
-                    <div>
-                        <input id = "notes" type="text" class="form-control form-input" />  
-                    </div>
-                </div>
-            </div>
-        </div>
--->
-  
-        
-  
 </div>
 
 <div class="row" style="height: 3rem;"></div>
          
         <div class="row" style="height: 3rem;">
-          <a onclick = "addRequest()" type="button" role="button" class="btn btn-lg btn-block red" style="width: 50%; margin-left: 25%; color:white; padding-top: 1.4em;">SUBMIT</a>
-        </div>
+          <a onclick = "addAsExtra()" type="button" role="button" class="btn btn-lg btn-block red" style="width: 50%; margin-left: 25%; color:white; padding-top: 1.4em;">MAKE CHANGE AND ADD AS EXTRA HOURS</a>
+</div>
+<div class="row" style="height: 3rem;"></div>
+<div class="row" style="height: 3rem;">
+          <a onclick = "override()" type="button" role="button" class="btn btn-lg btn-block red" style="width: 50%; margin-left: 25%; color:white; padding-top: 1.4em;">MAKE CHANGE AND OVERRIDE HOURS</a>
+</div>
     
 <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
@@ -143,7 +145,7 @@
       var signoutButton = document.getElementById('signout-button');
       
       // Names of participants and name of the studio they are in
-      var studName;
+      var studentRow;
       var studio;
       
       /**
@@ -182,8 +184,9 @@
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
-          studName = sessionStorage.getItem("studentName");
+          studentRow = sessionStorage.getItem("studentRowNum");
           studio = sessionStorage.getItem("studioName");
+          setTitle();
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -204,28 +207,113 @@
         gapi.auth2.getAuthInstance().signOut();
       }
       
-      function addRequest(){
+      function setTitle() {
+      	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: studio+'!A'+studentRow.toString()+':AA',
+        }).then(function(response) {
+        	var range = response.result;
+        	var row = range.values[0];
+        	document.getElementById("title").innerHTML = "Editing hours for: " + row[0]+" " + row[1];
+        	
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        }); 
+      }
+	
+	var currentExtraHours;
+	function addAsExtra(){
         var day = document.getElementById('day').value;
         var start = document.getElementById('start').value;
         var end = document.getElementById('end').value;
-        var notes = document.getElementById('notes').value;
         
-        if (day == '' || start == '' || end == '' || notes == '') {
+        if (day == '' || start == '' || end == '') {
         	alert('Please fill in all fields.');
         } else {
+        	var startAsDate =  setDateTime(start); 
+        	var endAsDate = setDateTime(end);
+        	var hoursWorked = (endAsDate - startAsDate)/360000000
+        	var minutes = hoursWorked % 1
+        	var minutesRounded = .25*Math.round(minutes*400)
+        	var roundedHours = Math.round(hoursWorked) + minutesRounded;
+        	        	
+        	gapi.client.sheets.spreadsheets.values.get({
+			  spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+			  range: studio+'!U'+studentRow,
+			}).then(function(response) {
+				var range = response.result;
+				if (typeof range.values != 'undefined') {
+					var row = range.values[0];
+					sessionStorage.setItem("currentExtraHours", row[0]); }
+				else {
+					sessionStorage.setItem("currentExtraHours", 0); }
+					sessionStorage.setItem("updatedExtraHours", sessionStorage.getItem("currentExtraHours")/1.0 + roundedHours)
+				gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: studio + "!" + "U" + studentRow,
+                    valueInputOption: 'USER_ENTERED',
+                    values: [[sessionStorage.getItem("updatedExtraHours")]]
+                }).then(function(response) {
+                    console.log(response);
+                }); 
+			}, function(response) {
+			  alert('Error: ' + response.result.error.message);
+			}); 
+            window.location.href = "../mentorapproval.html";
+      	}	
+	}
+	
+	function override(){
+      	var dayToNum = {'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 6}
+        var nToCol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var day = document.getElementById('day').value;
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        
+        if (day == '' || start == '' || end == '') {
+        	alert('Please fill in all fields.');
+        } else {
+        	var dayOfWeek = getDayOfWeek(day);
+        	var colToChange = 3*(dayToNum[dayOfWeek]-1)+2
+        	var startColToChange = nToCol.charAt(colToChange);
+        	var endColToChange = nToCol.charAt(colToChange+1)
         	start = (timeConvertor(start)).slice(0, -2);
         	end = (timeConvertor(end)).slice(0, -2);
-      		gapi.client.sheets.spreadsheets.values.append({
+      		gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-                    range: 'Requests',
+                    range: studio + "!" + startColToChange + studentRow + ":" + endColToChange + studentRow,
                     valueInputOption: 'USER_ENTERED',
-                    insertDataOption: 'INSERT_ROWS',
-                    values: [[studName, studio, day, start, end, notes]]
+                    values: [[start, end]]
                 }).then(function(response) {
                     console.log(response);
                 });
-            window.location.href = "../timesheetapp.html";
+            window.location.href = "../mentorapproval.html";
       	}	
+	}
+	
+	// Accepts a Date object or date string that is recognized by the Date.parse() method
+	function getDayOfWeek(date) {
+  		var dayOfWeek = new Date(date).getDay();    
+  		return isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
+	}
+	
+	function setDateTime(time) {
+		var index = time.indexOf(":"); // replace with ":" for differently displayed time.
+		var index2 = time.indexOf(" ");
+
+		var hours = time.substring(0, index);
+		var minutes = time.substring(index + 1, index2);
+
+		var mer = time.substring(index2 + 1, time.length);
+		if (mer == "PM"){
+			hours = hours + 12;
+		}
+		var date = new Date()
+		date.setHours(hours);
+		date.setMinutes(minutes);
+		date.setSeconds("00");
+
+		return date;
 	}
 	
 	function timeConvertor(time) {

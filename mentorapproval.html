@@ -209,7 +209,7 @@ limitations under the License.
       function fillRequestsTable() {
       	gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-          range: 'Requests!A2:F',
+          range: 'Requests!A2:G',
         }).then(function(response) {
         	var range = response.result;
         	
@@ -218,31 +218,33 @@ limitations under the License.
           	for (i = 0; i < range.values.length; ++i) {
           		var row = range.values[i];
           		var tr = document.createElement("tr");
-          		for (var j = 1; j < 6; j++) {
-          			var td = document.createElement("td");
-          			if (j == 1) {
-          				var txt = document.createTextNode(row[0]);
-          			} else {
-          				var txt = document.createTextNode(row[j]); }
-          			td.appendChild(txt);
-          			tr.appendChild(td);
+          		if (row[1] == studio && row[6] != 'Yes'){
+					for (var j = 1; j < 6; j++) {
+						var td = document.createElement("td");
+						if (j == 1) {
+							var txt = document.createTextNode(row[0]);
+						} else {
+							var txt = document.createTextNode(row[j]); }
+						td.appendChild(txt);
+						tr.appendChild(td);
+					}
+				
+					requestOverwriteApp(i);
+					var td = document.createElement("td");
+					td.appendChild(requestOverwriteBtn[i]);
+					tr.appendChild(td); 
+				
+					var d = new Date();
+					var x = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
+					requestExtraApp(i, dateDifference(row[2], x, (d.getDay()+6)%7));
+				
+					var td = document.createElement("td");
+					td.appendChild(requestExtraBtn[i]);
+					tr.appendChild(td); 
+				
+					tbody.appendChild(tr);
+					table.appendChild(tbody); 
           		}
-          		
-          		requestOverwriteApp(i);
-          		var td = document.createElement("td");
-          		td.appendChild(requestOverwriteBtn[i]);
-          		tr.appendChild(td); 
-          		
-          		var d = new Date();
-          		var x = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
-          		requestExtraApp(i, dateDifference(row[2], x, (d.getDay()+6)%7));
-          		
-          		var td = document.createElement("td");
-          		td.appendChild(requestExtraBtn[i]);
-          		tr.appendChild(td); 
-          		
-          		tbody.appendChild(tr);
-          		table.appendChild(tbody); 
           	}
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
@@ -369,8 +371,9 @@ limitations under the License.
 	  
 	  function edit(element) {
 	  		var row = getId(element);
-	  		alert('still working on it');
-	  		window.location.href = 'mentorrequests.html';
+	  		sessionStorage.setItem("studioName", studio)
+	  		sessionStorage.setItem("studentRowNum", row)
+	  		window.location.href = 'RequestEdit/mentorrequests.html';
 	  }
 	  
 	  function approve(element){
