@@ -159,11 +159,11 @@ limitations under the License.
           		var numRows = range.values.length;
           		var input = new Array(numRows);
           		for (j = 0; j < input.length; j++) {
-          			input[j] = ['', '', '', '', '', ''];
+          			input[j] = ['', '', '', '', '', '', ''];
           		}
           		gapi.client.sheets.spreadsheets.values.update({
                     spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-                    range: 'Requests!A2:F',
+                    range: 'Requests!A2:G',
                     valueInputOption: 'USER_ENTERED',
                     values: input
                 }).then(function(response) {

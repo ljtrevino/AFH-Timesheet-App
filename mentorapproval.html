@@ -29,17 +29,31 @@ limitations under the License.
     <button id="authorize-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Authorize</button>
 	<button id="signout-button" class="grey" style="float: right; margin: 10px; color: white; padding-top: .8rem;" >Admin Sign Out</button>
 
-    <div class="container">
-        <div class="row">
+	<div class="row">
             <div class="col-12 text-center" style="height:4em"></div>
-			<div id = "studioName" class="col-12 text-center" style="font-size: 4em;">
+
+            <div id = "studioName" class="col-12 text-center" style="font-size: 4em;">
+              REQUEST EDIT
             </div>
             <div class="col-12 text-center" style="height:4em"></div>
         </div>
+    <div class="container">
         
-        <div class="row">
+            <div class="row">
             <div class="col-12 text-center" style="height:4em"></div>
+            
 
+            <div class="col-12 text-center" style="font-size: 1em;">
+              In the first table, approve requests to timesheets or requests to extra hours. 
+              You can directly add these hours into the teen's "extra hours" column for this week, 
+              which should be done if the edited hours are from a previous work week. *IMPORTANT:
+              The override option writes over the current hours in the teen's timesheet for that day of the week. 
+              You should only use this option if you are editing a start/end time from this week.
+              In the second table, approve entire timesheets from the week. If there is something you wish to change, click edit and
+              you will be taken to a page where you can change the hours for a specific day.
+              Refresh after each approval to see an updated list of requests that still need to be addressed and timesheets that still need to be approved.
+              
+            </div>
             <div class="col-12 text-center" style="height:4em"></div>
         </div>
   
@@ -55,6 +69,7 @@ limitations under the License.
                   <th>NOTES</th>
                   <th>APPROVE AND OVERWRITE CURRENT TIMESHEET HOURS </th>
                   <th>APPROVE AND ADD AS EXTRA HOURS </th>
+                  <th>NUMBER OF HOURS REQUESTED TO BE ADDED </th>
                 </tr>
               </thead>
             </table>
@@ -204,12 +219,13 @@ limitations under the License.
         gapi.auth2.getAuthInstance().signOut();
       }
       
+      /**Create buttons for first requests table, one of "overwrite" buttons and one of "extra hours buttons"**/
       var requestOverwriteBtn = [];
       var requestExtraBtn = [];
       function fillRequestsTable() {
       	gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-          range: 'Requests!A2:G',
+          range: 'Requests!A2:H',
         }).then(function(response) {
         	var range = response.result;
         	
@@ -234,13 +250,15 @@ limitations under the License.
 					td.appendChild(requestOverwriteBtn[i]);
 					tr.appendChild(td); 
 				
-					var d = new Date();
-					var x = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
-					requestExtraApp(i, dateDifference(row[2], x, (d.getDay()+6)%7));
-				
+					requestExtraApp(i);
 					var td = document.createElement("td");
 					td.appendChild(requestExtraBtn[i]);
 					tr.appendChild(td); 
+					
+					var td = document.createElement("td");
+					var txt = document.createTextNode(row[7]);
+					td.appendChild(txt);
+					tr.appendChild(td);
 				
 					tbody.appendChild(tr);
 					table.appendChild(tbody); 
@@ -251,12 +269,13 @@ limitations under the License.
         }); 
       }
       
+      /**Creates buttons for second table of hours, not requests. "Edit hours" option button and "Approve" buttons **/
       var editBtnTable = [];
       var appBtnTable = [];
       function fillTimeTable() {
       	gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
-          range: studio+'!A2:AA',
+          range: studio+'!A2:AC',
         }).then(function(response) {
         	var range = response.result;
         	
@@ -264,28 +283,30 @@ limitations under the License.
         	var tbody = document.createElement("tbody");
           	for (i = 0; i < range.values.length; ++i) {
           		var row = range.values[i];
-          		var tr = document.createElement("tr");
-          		for (var j = 1; j < 22; j++) {
-          			var td = document.createElement("td");
-          			if (j == 1) {
-          				var txt = document.createTextNode(row[0]+' '+row[1]);
-          			} else {
-          				var txt = document.createTextNode(row[j]); }
-          			td.appendChild(txt);
-          			tr.appendChild(td);
+          		if (row[28] != "Yes") {
+					var tr = document.createElement("tr");
+					for (var j = 1; j < 22; j++) {
+						var td = document.createElement("td");
+						if (j == 1) {
+							var txt = document.createTextNode(row[0]+' '+row[1]);
+						} else {
+							var txt = document.createTextNode(row[j]); }
+						td.appendChild(txt);
+						tr.appendChild(td);
+					}
+				
+					newButton(i);
+					var td = document.createElement("td");
+					td.appendChild(editBtnTable[i]);
+					tr.appendChild(td); 
+				
+					var td = document.createElement("td");
+					td.appendChild(appBtnTable[i]);
+					tr.appendChild(td); 
+				
+					tbody.appendChild(tr);
+					table.appendChild(tbody); 
           		}
-          		
-          		newButton(i);
-          		var td = document.createElement("td");
-          		td.appendChild(editBtnTable[i]);
-          		tr.appendChild(td); 
-          		
-          		var td = document.createElement("td");
-          		td.appendChild(appBtnTable[i]);
-          		tr.appendChild(td); 
-          		
-          		tbody.appendChild(tr);
-          		table.appendChild(tbody); 
           	}
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
@@ -320,28 +341,26 @@ limitations under the License.
       	return false;
       }
       
+      /** Button that approves request and overwrites current timesheet with it **/
       function requestOverwriteApp(i) {
       	 requestOverwriteBtn[i] = document.createElement('BUTTON');
       	 var t = document.createTextNode('Approve');
       	 requestOverwriteBtn[i].appendChild(t);
       	 requestOverwriteBtn[i].name = i.toString(); 
       	 requestOverwriteBtn[i].onclick = function(){
-      	 	edit(requestOverwriteBtn[i]);return false; };
+      	 	requestOverridesHours(requestOverwriteBtn[i]);return false; };
       }
       
-      function requestExtraApp(i, this_week) {
-      	if (this_week) {
+      function requestExtraApp(i) {
       		requestExtraBtn[i] = document.createElement('BUTTON');
       	 	var t = document.createTextNode('Approve');
       	 	requestExtraBtn[i].appendChild(t);
       	 	requestExtraBtn[i].name = i.toString(); 
       	 	requestExtraBtn[i].onclick = function(){
-      	 		edit(requestExtraBtn[i]);return false; };
-      	} else {
-      		requestExtraBtn[i] = document.createTextNode('');     		
-      	}
+      	 		requestAddExtra(requestExtraBtn[i]);return false; };
     }
       
+      /** Handles creating buttons in second table. **/
       function newButton(i) {
       	 editBtnTable[i] = document.createElement('BUTTON');
       	 var t = document.createTextNode('Edit');
@@ -363,12 +382,149 @@ limitations under the License.
     		return element.parentNode.parentNode.rowIndex;
 	  }
 	  
-	  function editSheet(){
+	  /** Function to override current timesheet with request**/
+	  function requestOverridesHours(element){
+	  	var row = getId(element);
+	  	var studentName = document.getElementById("requests").rows[row].cells[0].innerHTML;
+	  	var date = document.getElementById("requests").rows[row].cells[1].innerHTML;
+	  	var timeIn = document.getElementById("requests").rows[row].cells[2].innerHTML;
+	  	var timeOut = document.getElementById("requests").rows[row].cells[3].innerHTML;
+	  	//Look for student in studio sheet
+	  	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: studio+'!A2:B',
+        }).then(function(response) {
+        	var range = response.result;
+        	var found = false;
+          	for (i = 0; i < range.values.length; i++) {
+				var testName = range.values[i][0] + " " + range.values[i][1];
+				if (studentName == testName) { 
+					studRow = i;
+					overrideHelper(i, date, timeIn, timeOut);
+					break;
+				}      	
+          } 
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        });
+        
+        changeApprovalStatusYes(row);
 	  }
 	  
-	  function addExtra(){
+	  function overrideHelper(row, date, timeIn, timeOut){
+      	var dayToNum = {'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 6}
+        var nToCol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+        var studentRow = row + 2;
+        
+        var dayOfWeek = getDayOfWeek(date);
+        var colToChange = 3*(dayToNum[dayOfWeek]-1)+2
+        var startColToChange = nToCol.charAt(colToChange);
+        var endColToChange = nToCol.charAt(colToChange+1);
+        start = timeIn.slice(0, -6) + " " + timeIn.slice(timeIn.length - 2, timeIn.length);
+        end = timeOut.slice(0, -6) + " " + timeOut.slice(timeIn.length - 2, timeIn.length);
+        start = timeConvertor(start).slice(0, -2);
+        end = timeConvertor(end).slice(0, -2);
+        gapi.client.sheets.spreadsheets.values.update({
+                spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                range: studio + "!" + startColToChange + studentRow + ":" + endColToChange + studentRow,
+                valueInputOption: 'USER_ENTERED',
+                values: [[start, end]]
+            }).then(function(response) {
+                    console.log(response);
+        });
+	}
+	  
+	  /** Function to add request as extra hours **/
+	  function requestAddExtra(element){
+        var row = getId(element);
+	  	var studentName = document.getElementById("requests").rows[row].cells[0].innerHTML;
+	  	var hoursAdded = document.getElementById("requests").rows[row].cells[7].innerHTML;
+
+	  	//Look for student in studio sheet
+	  	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: studio+'!A2:B',
+        }).then(function(response) {
+        	var range = response.result;
+          	for (i = 0; i < range.values.length; i++) {
+				var testName = range.values[i][0] + " " + range.values[i][1];
+				if (studentName == testName) { 
+					studRow = i;
+					addExtraHelper(row, hoursAdded);
+					break;
+				}      	
+          } 
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        });
+        changeApprovalStatusYes(row);	  	
 	  }
 	  
+	  function addExtraHelper(row, hoursAdded) {
+	  	var studentRow = row + 1;
+        	gapi.client.sheets.spreadsheets.values.get({
+			  spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+			  range: studio+'!U'+studentRow,
+			}).then(function(response) {
+				var range = response.result;
+				if (typeof range.values != 'undefined') {
+					var row = range.values[0];
+					sessionStorage.setItem("currentExtraHours", row[0]); }
+				else {
+					sessionStorage.setItem("currentExtraHours", 0); }
+					sessionStorage.setItem("updatedExtraHours", sessionStorage.getItem("currentExtraHours")/1.0 + parseInt(hoursAdded))
+				gapi.client.sheets.spreadsheets.values.update({
+                    spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    range: studio + "!" + "U" + studentRow,
+                    valueInputOption: 'USER_ENTERED',
+                    values: [[sessionStorage.getItem("updatedExtraHours")]]
+                }).then(function(response) {
+                    console.log(response);
+                }); 
+			}, function(response) {
+			  alert('Error: ' + response.result.error.message);
+			}); 
+	  }
+	  
+	  /** After approving request, changes approval status in sheet to "Yes" for that request **/
+	  function changeApprovalStatusYes(row) {
+	  	var studentName = document.getElementById("requests").rows[row].cells[0].innerHTML;
+	  	var date = document.getElementById("requests").rows[row].cells[1].innerHTML;
+	  	var timeIn = document.getElementById("requests").rows[row].cells[2].innerHTML;
+	  	var timeOut = document.getElementById("requests").rows[row].cells[3].innerHTML;
+	  	gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+          range: 'Requests!A2:E',
+        }).then(function(response) {
+        	var range = response.result;
+          	for (i = 0; i < range.values.length; i++) {
+          		var row = range.values[i]
+				var testName = row[0];
+				var testStudio = row[1];
+				var testDate = row[2];
+				var testStartTime = row[3];
+				var testEndTime = row[4];
+				if (studentName == testName && studio == testStudio && date == testDate && timeIn == testStartTime && timeOut == testEndTime) { 
+					var rowToChange = i + 2;
+					gapi.client.sheets.spreadsheets.values.update({
+                    	spreadsheetId: '1K2cX-vwlYq-xOMtuHR98ou464pKTr3Lk4-b16YFP-Rw',
+                    	range: 'Requests!G'+rowToChange.toString(),
+                    	valueInputOption: 'USER_ENTERED',
+                    	values: [['Yes']]
+                }).then(function(response) {
+                    console.log(response);
+                });
+					
+				}      	
+          } 
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        });
+	  }
+	  
+	  
+	  /** Function to edit hours in second table**/
 	  function edit(element) {
 	  		var row = getId(element);
 	  		sessionStorage.setItem("studioName", studio)
@@ -376,6 +532,7 @@ limitations under the License.
 	  		window.location.href = 'RequestEdit/mentorrequests.html';
 	  }
 	  
+	  /** Function to approve hours in second table**/
 	  function approve(element){
 	  		var row = getId(element);
 	  		gapi.client.sheets.spreadsheets.values.update({
@@ -387,6 +544,26 @@ limitations under the License.
                     console.log(response);
                 });
 	  }
+	  
+	  function getDayOfWeek(date) {
+  		var dayOfWeek = new Date(date).getDay();    
+  		return isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
+	}
+	
+	function timeConvertor(time) {
+    	var PM = time.match('PM') ? true : false
+    
+    	time = time.split(':')
+    	var min = time[1]
+    
+		if (PM) {
+			var hour = 12 + parseInt(time[0],10);
+		} else {
+			var hour = time[0]; 
+		}
+    	var x = hour + ':' + min;
+    	return x;
+	}    
     </script>
 
     <script async defer src="https://apis.google.com/js/api.js"
